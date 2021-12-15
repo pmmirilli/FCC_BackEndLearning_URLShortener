@@ -37,6 +37,7 @@ const getHash = (input) => {
   return hash;
 }
 
+// Create short URL based on the last 4 digits of a hash generated from the original url.
 const createShortUrl = (url) => {
   let shortUrl = getHash(url);
   shortUrl /= 10000;
@@ -48,16 +49,19 @@ const createShortUrl = (url) => {
   return shortUrl;
 }
 
+// Validate a URL to be in the "http://" format.
 const isValidUrl = (url) => {
   try {
     new URL(url);
-    return true;
+    const http = /(https?:\/\/(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9])(:?\d*)\/?([a-z_\/0-9\-#.]*)\??([a-z_\/0-9\-#=&]*)/g;
+    return http.test(url);
   } catch (error) {
     console.log(error.message);
     return false;
   }
 };
 
+// Create entry in database.
 const createEntryDB = (originalUrl, shortUrl) => {
   ShortURL.create({
     original_url: originalUrl,
